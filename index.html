@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sarcasm Detection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Raleway:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(125deg, #0f0c29, #302b63, #24243e);
+      color: #f0f0f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Animated background elements */
+    .bg-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    .blob-1 {
+      width: 700px;
+      height: 700px;
+      background: rgba(100, 0, 255, 0.3);
+      top: -20%;
+      left: -10%;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: rgba(255, 0, 128, 0.2);
+      bottom: -30%;
+      right: -5%;
+      animation-delay: -5s;
+    }
+
+    .blob-3 {
+      width: 300px;
+      height: 300px;
+      background: rgba(0, 255, 255, 0.25);
+      top: 40%;
+      right: 20%;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate(0px, 0px) scale(1);
+      }
+      33% {
+        transform: translate(30px, -50px) scale(1.05);
+      }
+      66% {
+        transform: translate(-20px, 20px) scale(0.95);
+      }
+      100% {
+        transform: translate(0px, 0px) scale(1);
+      }
+    }
+
+    .card-custom {
+      background: rgba(20, 20, 35, 0.7);
+      backdrop-filter: blur(15px);
+      border-radius: 24px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      width: 100%;
+      max-width: 720px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+
+    .card-custom:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    h1 {
+      font-weight: 800;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .tagline {
+      text-align: center;
+      color: #a0a0ff;
+      margin-bottom: 30px;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      font-size: 1.1rem;
+    }
+
+    label {
+      color: #dddddd;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .form-control {
+      background-color: rgba(30, 30, 50, 0.6);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 15px;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+
+    .form-control::placeholder {
+      color: rgba(200, 200, 255, 0.5);
+    }
+
+    .form-control:focus {
+      background-color: rgba(40, 40, 70, 0.8);
+      color: #fff;
+      border-color: #8a2be2;
+      box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+    }
+
+    .btn-custom {
+      background: linear-gradient(45deg, #8a2be2, #4b0082);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 35px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn-custom:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #4b0082, #8a2be2);
+      transition: all 0.4s ease;
+      z-index: -1;
+    }
+
+    .btn-custom:hover:before {
+      left: 0;
+    }
+
+    .btn-custom:hover {
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .result-box {
+      background-color: rgba(30, 30, 50, 0.6);
+      border-left: 5px solid #8a2be2;
+      padding: 25px;
+      border-radius: 12px;
+      margin-top: 35px;
+      color: #eee;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-box:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), transparent 70%);
+      border-radius: 0 0 0 100%;
+    }
+
+    .result-box h4 {
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 15px;
+    }
+
+    .result-box p {
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .assistant-quote {
+      position: absolute;
+      font-family: 'Raleway', sans-serif;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      font-style: italic;
+      max-width: 250px;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .quote-1 {
+      top: 15%;
+      left: -280px;
+      transform: rotate(-10deg);
+    }
+
+    .quote-2 {
+      bottom: 20%;
+      left: -250px;
+      transform: rotate(5deg);
+    }
+
+    .quote-3 {
+      top: 25%;
+      right: -280px;
+      transform: rotate(8deg);
+    }
+
+    .quote-4 {
+      bottom: 15%;
+      right: -250px;
+      transform: rotate(-7deg);
+    }
+
+    .icon-badge {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, #8a2be2, #4b0082);
+      border-radius: 50%;
+      margin-right: 10px;
+      box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+    }
+
+    .input-group-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 24px;
+      background: #8a2be2;
+      animation: blink 1s infinite;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @media (max-width: 992px) {
+      .assistant-quote {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .card-custom {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="container">
+    <div class="assistant-quote quote-1">
+      "I analyze language patterns to detect subtle sarcasm cues humans often miss."
+    </div>
+    <div class="assistant-quote quote-2">
+      "Sarcasm is the body language of language. Let me decode it for you."
+    </div>
+    <div class="assistant-quote quote-3">
+      "I'm your AI assistant, trained to detect what's said versus what's meant."
+    </div>
+    <div class="assistant-quote quote-4">
+      "Is that sarcasm? I'm precisely engineered to tell you... honestly."
+    </div>
+
+    <div class="card-custom">
+      <h1>Sarcasm Detection <span class="cursor"></span></h1>
+      <p class="tagline">Your AI assistant for detecting hidden meaning behind words</p>
+      
+      <form action="/predict" method="POST">
+        <div class="form-group">
+          <div class="input-group-title">
+            <div class="icon-badge">
+              <i class="fas fa-comment-dots"></i>
+            </div>
+            <label for="statement">Enter your statement:</label>
+          </div>
+          <textarea
+            class="form-control"
+            id="statement"
+            name="statement"
+            rows="3"
+            placeholder="Type your statement here, and I'll detect if it's sarcastic..."></textarea>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-custom">
+            <i class="fas fa-search mr-2"></i> Detect Sarcasm
+          </button>
+        </div>
+      </form>
+
+      {% if sarcasm_label %}
+        <div class="result-box">
+          <h4><i class="fas fa-robot mr-2"></i> Analysis Result:</h4>
+          <p><strong>Sarcasm Detection:</strong> {{ sarcasm_label }}</p>
+          <p><strong>Statement Analyzed:</strong> <em>"{{ statement }}"</em></p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
